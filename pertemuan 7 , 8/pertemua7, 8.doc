@@ -1,0 +1,369 @@
+mysql> #Pertemuan 7,8
+mysql> #1. Buat db
+mysql> create database servis_jaya
+    -> ;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| modul3             |
+| modul4             |
+| modul_5            |
+| mysql              |
+| performance_schema |
+| servis_jaya        |
+| sys                |
++--------------------+
+8 rows in set (0.02 sec)
+
+mysql> #2. Buat tabel sesuai ERD tanpa PK
+mysql> use servis_jaya;
+Database changed
+mysql> create table customer (
+    -> id_customer int(4) not null,
+    -> nama_customer varchar(25) not null,
+    -> alamat_customer varchar(80) not null,
+    -> no_telp_customer int(15) not null,
+    -> keluhan text not null);
+Query OK, 0 rows affected, 2 warnings (0.14 sec)
+
+mysql> create table servicer (
+    -> id_servicer int(4) not null,
+    -> nama_servicer varchar(25) not null,
+    -> no_telp_servicer int(15) not null);
+Query OK, 0 rows affected, 2 warnings (0.08 sec)
+
+mysql> create table queue (
+    -> id_queue int(4),
+    -> id_customer int(4),
+    -> id_servicer int(4) not null,
+    -> keluhan text not null);
+Query OK, 0 rows affected, 3 warnings (0.46 sec)
+
+mysql> alter table queue
+    -> add not null(id_queue),
+    -> add not null(id_customer);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null(id_queue),
+add not null(id_customer)' at line 2
+mysql> alter table queue
+    -> modify id_queue int(4) not null,
+    -> modify id_customer int(4) not null;
+Query OK, 0 rows affected, 2 warnings (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 2
+
+mysql> #3. Tampilkan db
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| modul3             |
+| modul4             |
+| modul_5            |
+| mysql              |
+| performance_schema |
+| servis_jaya        |
+| sys                |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> #4. tampilkan semua struktur tbl
+mysql> show tables;
++-----------------------+
+| Tables_in_servis_jaya |
++-----------------------+
+| customer              |
+| queue                 |
+| servicer              |
++-----------------------+
+3 rows in set (0.00 sec)
+
+mysql> desc customer;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| id_customer      | int         | NO   |     | NULL    |       |
+| nama_customer    | varchar(25) | NO   |     | NULL    |       |
+| alamat_customer  | varchar(80) | NO   |     | NULL    |       |
+| no_telp_customer | int         | NO   |     | NULL    |       |
+| keluhan          | text        | NO   |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> desc queue;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| id_queue    | int  | NO   |     | NULL    |       |
+| id_customer | int  | NO   |     | NULL    |       |
+| id_servicer | int  | NO   |     | NULL    |       |
+| keluhan     | text | NO   |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc servicer;
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| id_servicer      | int         | NO   |     | NULL    |       |
+| nama_servicer    | varchar(25) | NO   |     | NULL    |       |
+| no_telp_servicer | int         | NO   |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> #5. isi tabel dengan data
+mysql> insert into customer values
+    -> (1212, 'Khidir Afwan', 'Jl. Jawa no 51', 08987654320, 'Tv nya ga ada suara'),
+    -> (1213, 'Dwi Palmera', 'Jl. ekonomi no 103', 08987654321, 'Kipas mati, bau gosong'),
+    -> (1214, 'Putri Devana', 'Jl. ekonomi no 43', 08987654322, 'gambar bures'),
+    -> (1215, 'Ano Hito', 'Jl. dirgantara no 12', 08987654323, 'Bau gosong');
+ERROR 1264 (22003): Out of range value for column 'no_telp_customer' at row 1
+mysql> alter table customer
+    -> ;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into customer values
+    -> (1212, 'Khidir Afwan', 'Jl. Jawa no 51', 087654320, 'Tv nya ga ada suara'),
+    -> (1213, 'Dwi Palmera', 'Jl. ekonomi no 103', 087654321, 'Kipas mati, bau gosong'),
+    -> (1214, 'Putri Devana', 'Jl. ekonomi no 43', 087654322, 'gambar bures'),
+    -> (1215, 'Ano Hito', 'Jl. dirgantara no 12', 087654323, 'Bau gosong');
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> insert into servicer values
+    -> (001, 'Muhammad Raphael', 08456321),
+    -> (002, 'Umar Chamdan', 08456322),
+    -> (003, 'Dony Saputra', 08456323);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into queue values
+    -> (141, 1215, 002, 'Bau gosng'),
+    -> (142, 1213, 002, 'Kipas mati, bau gosong'),
+    -> (143, 1214, 003, 'Tv nya ga ada suara'),
+    -> ^C
+mysql> insert into queue values
+    -> (141, 1215, 002, 'Bau gosng'),
+    -> (142, 1213, 002, 'Kipas mati, bau gosong'),
+    -> (143, 1212, 003, 'Tv nya ga ada suara'),
+    -> (144, 1214, 001, 'gambar bures');
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> #6. tambilkan data
+mysql> select * from customer;
++-------------+---------------+----------------------+------------------+------------------------+
+| id_customer | nama_customer | alamat_customer      | no_telp_customer | keluhan                |
++-------------+---------------+----------------------+------------------+------------------------+
+|        1212 | Khidir Afwan  | Jl. Jawa no 51       |         87654320 | Tv nya ga ada suara    |
+|        1213 | Dwi Palmera   | Jl. ekonomi no 103   |         87654321 | Kipas mati, bau gosong |
+|        1214 | Putri Devana  | Jl. ekonomi no 43    |         87654322 | gambar bures           |
+|        1215 | Ano Hito      | Jl. dirgantara no 12 |         87654323 | Bau gosong             |
++-------------+---------------+----------------------+------------------+------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from servicer;
++-------------+------------------+------------------+
+| id_servicer | nama_servicer    | no_telp_servicer |
++-------------+------------------+------------------+
+|           1 | Muhammad Raphael |          8456321 |
+|           2 | Umar Chamdan     |          8456322 |
+|           3 | Dony Saputra     |          8456323 |
++-------------+------------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from queue;
++----------+-------------+-------------+------------------------+
+| id_queue | id_customer | id_servicer | keluhan                |
++----------+-------------+-------------+------------------------+
+|      141 |        1215 |           2 | Bau gosng              |
+|      142 |        1213 |           2 | Kipas mati, bau gosong |
+|      143 |        1212 |           3 | Tv nya ga ada suara    |
+|      144 |        1214 |           1 | gambar bures           |
++----------+-------------+-------------+------------------------+
+4 rows in set (0.00 sec)
+
+mysql> 7. Tambahkan PK
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '7. Tambahkan PK' at line 1
+mysql> #7. Tambhakan PK
+mysql> alter table customer
+    -> add primary key(id_customer),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> alter table customer
+    -> add primary key(id_customer);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table servicer
+    -> add primary key(id_servicer);
+Query OK, 0 rows affected (0.20 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table queue
+    -> add primary key(id_queue);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> #8. Buat no_telp_customer unique
+mysql> alter table customer
+    -> add unique (no_telp_customer);
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> #9. Buat tbl baru dengan nama ..._copy pada salah astu tbl
+mysql> create table customer_copy
+    -> select * from customer;
+Query OK, 4 rows affected (0.04 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> #10. Masukkan satu nama_customer yang sama yang sudah ada
+mysql> insert into customer_copy values
+    -> select nama_customer
+    -> where nama_customer='Khidir Afwan'
+    -> from customer;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select nama_customer
+where nama_customer='Khidir Afwan'
+from customer' at line 2
+mysql> insert into customer_copy values
+    -> (1216, 'Khidir Afwan', 'Jl. jalan no 01', 08765434, 'Perawatan');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> #11. Buat FK
+mysql> alter table queue 
+    -> add foreign key(id_customer)references customer(id_customer) on update cascade on delete cascade,
+    -> add foreign key(id_servicer)references servicer(id_servicer) on update cascade on delete cascade;
+Query OK, 4 rows affected (0.06 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> alter table queue 
+    -> add foreign key(keluhan)references customer(keluhan) on update cascade on delete cascade;
+ERROR 1170 (42000): BLOB/TEXT column 'keluhan' used in key specification without a key length
+mysql> #12. Tambah data queque
+mysql> insert into queue values
+    -> (145, 1215, 003, 'perawatan');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> #13 tambah data servicer
+mysql> insert into servicer values
+    -> (004, 'Malik DWiyantoro', 8456354);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> #14. Hapus data no 12
+mysql> delete from queue where id_queue=145;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> #15. Tampilkan semua isi tbl antrian
+mysql> select * from queue;
++----------+-------------+-------------+------------------------+
+| id_queue | id_customer | id_servicer | keluhan                |
++----------+-------------+-------------+------------------------+
+|      141 |        1215 |           2 | Bau gosng              |
+|      142 |        1213 |           2 | Kipas mati, bau gosong |
+|      143 |        1212 |           3 | Tv nya ga ada suara    |
+|      144 |        1214 |           1 | gambar bures           |
++----------+-------------+-------------+------------------------+
+4 rows in set (0.00 sec)
+
+mysql> #16 tambahkan field
+mysql> #pada queue
+mysql> alter table queue
+    -> add date date not null;
+ERROR 1292 (22007): Incorrect date value: '0000-00-00' for column 'date' at row 1
+mysql> add tanggal date not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add tanggal date not null' at line 1
+mysql> alter table queue
+    -> add column tanggal date not null;
+ERROR 1292 (22007): Incorrect date value: '0000-00-00' for column 'tanggal' at row 1
+mysql> alter table queue
+    -> add column tanggal date;
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table queue
+    -> change tanggal waktu date;
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> #18. Hapus field kemudian tampilkan strutkur tbl
+mysql> alter table queue
+    -> drop column waktu;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc queue;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| id_queue    | int  | NO   | PRI | NULL    |       |
+| id_customer | int  | NO   | MUL | NULL    |       |
+| id_servicer | int  | NO   | MUL | NULL    |       |
+| keluhan     | text | NO   |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> #19. ganti nama tabel
+mysql> rename table queue antrian
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'antrian' at line 1
+mysql> rename table queue to antrian;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> #20. hapus antrian
+mysql> delete from antrian;
+Query OK, 4 rows affected (0.00 sec)
+
+mysql> select * from antrian;
+Empty set (0.00 sec)
+
+mysql> #21. Input antrian 3 data
+mysql> insert into antrian values
+    -> (1416, 1215, 001, 'tidak bisa menyala'),
+    -> (1417, 1214, 001, 'perawatan'),
+    -> (1418, 1213, 003, 'perawatan');
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> #22. ubah nama servicer dengan id tertentu
+mysql> update servicer set nama_servicer='Budi Santoso' where id=001;
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update servicer set nama_servicer='Budi Santoso' where id_servicer=001;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> #23. Hapus data pelanggan yang memiliki keluhan gambar bures
+mysql> delete from customer where keluhan='gambar bures';
+Query OK, 1 row affected (0.00 sec)
+
+mysql> #24. Hapus semua tabel 
+mysql> show tables
+    -> ;
++-----------------------+
+| Tables_in_servis_jaya |
++-----------------------+
+| antrian               |
+| customer              |
+| customer_copy         |
+| servicer              |
++-----------------------+
+4 rows in set (0.00 sec)
+
+mysql> drop tabel customer_copy, antrian, customer, servicer;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabel customer_copy, antrian, customer, servicer' at line 1
+mysql> drop tabel customer_copy;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'tabel customer_copy' at line 1
+mysql> drop table customer_copy, antrian, customer, servicer;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> #25. Hapus DB
+mysql> drop database servis_jaya;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> \q
